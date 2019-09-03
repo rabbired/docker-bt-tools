@@ -1,6 +1,5 @@
-# subfinder / 容器化字幕查找器 
+# subfinder / 字幕查找器
 https://github.com/subfinder/subfinder
-# and
 # Auto Remove Torrents / 自动删种程序
 https://github.com/jerrymakesjelly/autoremove-torrents
 
