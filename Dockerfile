@@ -1,7 +1,7 @@
 FROM python:3.7-alpine
 
-ENV SUBFIND_DIR
-ENV CONFIG_DIR
+ARG SUBFIND_DIR
+ARG CONFIG_DIR
 
 RUN apk update && \
     apk upgrade && \
