@@ -1,7 +1,7 @@
 FROM python:3.7-alpine
 
-ARG SUBFIND_DIR
-ARG CONFIG_DIR
+ENV SUBFIND_DIR=/movie
+ENV CONFIG_DIR=/config
 
 RUN apk update && \
     apk upgrade && \
@@ -10,11 +10,6 @@ RUN apk update && \
     pip install subfinder && \
     pip install pip install autoremove-torrents
 
-RUN echo '0    0 * * * pip install subfinder --upgrade' > /etc/crontabs/root && \
-    echo '0    0 * * * pip install autoremove-torrents --upgrade' > /etc/crontabs/root && \
-    echo '0    * * * * subfinder ${SUBFIND_DIR} -l zh -m shooter' >> /etc/crontabs/root && \
-    echo '0    * * * * subfinder ${SUBFIND_DIR} -l zh_chs -m zimuku' >> /etc/crontabs/root && \
-    echo '0    * * * * subfinder ${SUBFIND_DIR} -l zh_chs -m zimuzu' >> /etc/crontabs/root && \
-    echo '*/15 * * * * autoremove-torrents --conf=${CONFIG_DIR}/config.yml' >> /dev/null 2>&1
+ADD start.sh /start.sh
 
-CMD ["crond", "-f", "-d", "8"]
+CMD ["/bin/sh", "/start.sh"]
