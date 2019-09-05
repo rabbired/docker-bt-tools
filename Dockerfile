@@ -1,28 +1,24 @@
-FROM python:3.7-alpine
+FROM rabbired/ubuntu-base
 
-ENV SUBFIND_DIR=/movie
-ENV CONFIG_DIR=/config
-ENV LANG=zh_CN.UTF-8
-ENV LANGUAGE=zh_CN:zh
-ENV LC_ALL=zh_CN.UTF-8
-ENV TZ=Asia/Shanghai
-ENV UMASK_SET=000
+MAINTAINER rabbired@outlook.com RedZ
 
-RUN apk update && \
-    apk upgrade && \
-    apk add --no-cache --virtual .build-deps gcc libc-dev libxml2-dev libxslt-dev unzip unrar tzdata && \
-    cp -f /usr/share/zoneinfo/$TZ /etc/localtime && \
-    pip install --upgrade pip && \
-    pip install subfinder && \
+USER root
+
+ENV SUB_DIR=/subfind
+ENV CFG_DIR=/config
+
+RUN apt-get -yqq update && apt-get -yqq upgrade && \
+    apt-get -yqq install python3-pip && \
+    update-alternatives --install /usr/bin/python python /usr/bin/python3 150 && \
+    wget http://bootstrap.pypa.io/get-pip.py && \
+    python3 get-pip.py && rm -f get-pip.py && \
+    ln -s /usr/bin/pip3 /usr/bin/pip && \
+    pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple && \
     pip install autoremove-torrents && \
-    apk del tzdata && \
-    rm -rf /var/cache/apk/* && \
-    rm -rf /root/.cache && \
-    rm -rf /tmp/* && \
-    umask $UMASK_SET
+    pip install flexget && \
+    pip install subfinder && \
+    apt-get -y autoclean && apt-get -y autoremove --purge && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    rm -rf /var/cache/* /root/sources/*
 
-ADD start.sh /start.sh
-
-WORKDIR /
-
-CMD ["/bin/sh", "/start.sh"]
+USER app
