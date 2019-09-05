@@ -17,6 +17,7 @@ RUN apt-get -yqq update && apt-get -yqq upgrade && \
     pip install autoremove-torrents && \
     pip install flexget && \
     pip install subfinder && \
+    ln -sf /config/crontab /etc/crontab && \
     apt-get -y autoclean && apt-get -y autoremove --purge && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     rm -rf /var/cache/* /root/sources/*
