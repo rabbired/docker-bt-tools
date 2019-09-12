@@ -7,7 +7,8 @@ USER root
 ENV SUB_DIR=/subfind
 ENV CFG_DIR=/config
 
-RUN apt-get -yqq update && apt-get -yqq upgrade && \
+RUN mkdir -p /subfind /config /torrents && \
+    apt-get -yqq update && apt-get -yqq upgrade && \
     apt-get -yqq install python3-pip && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3 150 && \
     wget http://bootstrap.pypa.io/get-pip.py && \
