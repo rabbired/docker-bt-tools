@@ -4,10 +4,7 @@ MAINTAINER rabbired@outlook.com RedZ
 
 USER root
 
-ENV SUB_DIR=/subfind
-ENV CFG_DIR=/config
-
-RUN mkdir -p /subfind /config /torrents && \
+RUN mkdir -p /config /movies /torrents && \
     apt-get -yqq update && apt-get -yqq upgrade && \
     apt-get -yqq install python3-pip && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3 150 && \

@@ -8,16 +8,16 @@ https://github.com/jerrymakesjelly/autoremove-torrents
 
 ```
 docker run -d \
--e SUB_DIR="/movie_dir" \
--e CFG_DIR="path/to/config.yml" \
--v "/path/to/yourfolder:/movie_dir" \
+-v "/path/to/your_config_folder:/config" \
+-v "/path/to/your_movies_folder:/movies" \
+-v "/path/to/your_torrent_folder:/torrents" \
 rabbired/bt-tools
 ```
 
 ### or
 
 ```
-docker run --rm -v "/path/to/yourfolder:/movie_dir" rabbired/bt-tools subfinder --help
-docker run --rm -v "/path/to/yourfolder:/movie_dir" rabbired/bt-tools autoremove-torrents --help
-docker run --rm -v "/path/to/yourfolder:/movie_dir" rabbired/bt-tools flexget --help
+docker run --rm -v "/path/to/yourfolder:/config" rabbired/bt-tools subfinder --help
+docker run --rm -v "/path/to/yourfolder:/config" rabbired/bt-tools autoremove-torrents --help
+docker run --rm -v "/path/to/yourfolder:/config" rabbired/bt-tools flexget --help
 ```
