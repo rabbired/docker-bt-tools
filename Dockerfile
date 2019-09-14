@@ -14,7 +14,7 @@ ENV TZ=Asia/Shanghai
 
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories && \
     apk update && \
-    apk add --no-cache musl-dev gcc libxml2 libxml2-dev libxslt libxslt-dev sudo tzdata && \
+    apk add --no-cache musl-dev gcc libxml2 libxml2-dev libxslt libxslt-dev sudo tzdata inotify-tools && \
     pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple && \
     pip install autoremove-torrents flexget subfinder transmissionrpc && \
     apk del --purge --no-cache musl-dev gcc libxml2 libxml2-dev libxslt libxslt-dev && \
