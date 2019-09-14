@@ -1,23 +1,39 @@
-FROM rabbired/ubuntu-base
+FROM python:alpine
+MAINTAINER RedZ "rabbired@outlook.com"
 
-MAINTAINER rabbired@outlook.com RedZ
+ENV UID=1000
+ENV GID=1000
+ENV UNAME=app
+ENV UPASS=passwd
+ENV UDIR=/home/$UNAME
 
-USER root
+ENV LANG=zh_CN.UTF-8
+ENV LANGUAGE=zh_CN:zh
+ENV LC_ALL=zh_CN.UTF-8
+ENV TZ=Asia/Shanghai
 
-RUN mkdir -p /config /movies /torrents && \
-    apt-get -yqq update && apt-get -yqq upgrade && \
-    apt-get -yqq install python3-pip && \
-    update-alternatives --install /usr/bin/python python /usr/bin/python3 150 && \
-    wget http://bootstrap.pypa.io/get-pip.py && \
-    python3 get-pip.py && rm -f get-pip.py && \
-    ln -s /usr/bin/pip3 /usr/bin/pip && \
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories && \
+    apk update && \
+    apk add --no-cache musl-dev gcc libxml2 libxml2-dev libxslt libxslt-dev sudo tzdata && \
     pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple && \
-    pip install autoremove-torrents && \
-    pip install flexget && \
-    pip install subfinder && \
-    ln -sf /config/crontab /etc/crontab && \
-    apt-get -y autoclean && apt-get -y autoremove --purge && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    rm -rf /var/cache/* /root/sources/*
+    pip install autoremove-torrents flexget subfinder transmissionrpc && \
+    apk del --purge --no-cache musl-dev gcc libxml2 libxml2-dev libxslt libxslt-dev && \
+    find -type d -name __pycache__ -prune -exec rm -rf {} \; && \
+    rm -rf \
+        /tmp/* \
+        /root/.cache \
+        ~/.cache
 
-USER app
+RUN mkdir -p /config /subfind /torrents && \
+    addgroup -g $GID $UNAME && \
+    adduser -h $UDIR -u $UID -G $UNAME -D $UNAME && \
+    echo "$UNAME:$UPASS" | chpasswd && \
+    echo "$UNAME ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
+    echo "${TZ}" > /etc/timezone && \
+    ln -s /usr/share/zoneinfo/$TZ /etc/localtime && \
+    ln -sf /config/crontab /etc/crontabs/app
+
+USER $UNAME
+WORKDIR $UDIR
+
+CMD [ "/usr/sbin/crond", "-f" ]
