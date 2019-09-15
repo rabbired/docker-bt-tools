@@ -36,4 +36,4 @@ RUN mkdir -p /config /subfind /torrents && \
 USER $UNAME
 WORKDIR $UDIR
 
-CMD [ "/usr/sbin/crond", "-f" ]
+CMD ["crond", "-f", "-d", "8"]
