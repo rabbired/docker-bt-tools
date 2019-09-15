@@ -32,9 +32,15 @@ RUN mkdir -p /config /subfind /torrents && \
     echo "${TZ}" > /etc/timezone && \
     ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && \
     ln -sf /config/cron.d /etc/cron.d && \
-    ln -sf /config/flexget $UDIR\.flexget
+    ln -sf /config/flexget $UDIR/.flexget && \
+    ln -sf /config/subfinder.json $UDIR/.subfinder.json
+
+ENV CRON=true
 
 USER $UNAME
 WORKDIR $UDIR
 
-CMD ["crond", "-f", "-L", "/dev/stdout", "-c", "/etc/cron.d"]
+COPY entrypoint.sh $UDIR/
+COPY findsub.sh $UDIR/
+
+ENTRYPOINT ["sh", "-c", "~/entrypoint.sh"]
