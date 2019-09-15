@@ -30,10 +30,11 @@ RUN mkdir -p /config /subfind /torrents && \
     echo "$UNAME:$UPASS" | chpasswd && \
     echo "$UNAME ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     echo "${TZ}" > /etc/timezone && \
-    ln -s /usr/share/zoneinfo/$TZ /etc/localtime && \
-    ln -sf /config/crontab /etc/crontabs/app
+    ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && \
+    ln -sf /config/cron.d /etc/cron.d && \
+    ln -sf /config/flexget $UDIR\.flexget
 
 USER $UNAME
 WORKDIR $UDIR
 
-CMD ["crond", "-f", "-d", "8"]
+CMD ["crond", "-f", "-L", "/dev/stdout" "-c" "/etc/cron.d"]
