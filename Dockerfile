@@ -37,4 +37,4 @@ RUN mkdir -p /config /subfind /torrents && \
 USER $UNAME
 WORKDIR $UDIR
 
-CMD ["crond", "-f", "-L", "/dev/stdout" "-c" "/etc/cron.d"]
+CMD ["crond", "-f", "-L", "/dev/stdout", "-c", "/etc/cron.d"]
