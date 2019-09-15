@@ -1,5 +1,5 @@
 #!/bin/sh
-if [ "$cron" = "TRUE" ] || [ "$cron" = "ON" ] || [ "$cron" = "true" ] || [ "$cron" = "on" ];
+if [ "$CRON" = "TRUE" ] || [ "$CRON" = "ON" ] || [ "$CRON" = "true" ] || [ "$CRON" = "on" ];
 then
     crond -b -L ~/cron.log -c /etc/cron.d
 fi
